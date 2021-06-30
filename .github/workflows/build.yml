@@ -14,7 +14,7 @@ jobs:
       with:
         submodules: recursive
 
-    - run: sudo apt search libgit2
+    - run: sudo apt install libgit2-dev -y
 
     - name: Create Build Environment
       run: cmake -E make_directory ${{runner.workspace}}/build
