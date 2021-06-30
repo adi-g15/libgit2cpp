@@ -21,6 +21,7 @@ namespace git
 
         opts.callbacks.update_tips = [] (char const * refname, git_oid const * a, git_oid const * b, void * data)
         {
+            // this cast here is safe, as it was just 'callbacks', casted to void*
             auto callbacks = static_cast<FetchCallbacks*>(data);
             callbacks->update_tips(refname, *a, *b);
             return 0;
@@ -31,13 +32,14 @@ namespace git
             callbacks->sideband_progress(str, len);
             return 0;
         };
-        opts.callbacks.transfer_progress = [] (git_transfer_progress const * stats, void * data)
+        // During the download of new data, this will be regularly called with the current count of progress done by the indexer.
+        opts.callbacks.transfer_progress = [] (git_indexer_progress const * stats, void * data)
         {
             auto callbacks = static_cast<FetchCallbacks*>(data);
             callbacks->transfer_progress(*stats);
             return 0;
         };
-        opts.callbacks.credentials = [] (git_cred ** out, char const *url, char const * user_from_url, unsigned int allowed_types, void * data)
+        opts.callbacks.credentials = [] (git_credential ** out, char const *url, char const * user_from_url, unsigned int allowed_types, void * data)
         {
             auto callbacks = static_cast<FetchCallbacks*>(data);
             auto cred = callbacks->acquire_cred(url, user_from_url, allowed_types);

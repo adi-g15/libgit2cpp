@@ -1,5 +1,13 @@
-project (libgit2cpp)
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.12)
+
+project (libgit2cpp
+	DESCRIPTION "C++ wrapper for libgit2 library"
+	LANGUAGES C CXX
+	VERSION 1.1.0
+	)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
 # Build options
 OPTION(USE_BOOST "Enable use of boost header libraries" OFF)
@@ -16,7 +24,10 @@ else()
   OPTION(BUNDLE_LIBGIT2 "use bundled libgit2" OFF)
 endif()
 
+# https://gist.github.com/scivision/bb1d47a9529e153617414e91ff5390af
+include(cmake/AddGitSubmodule.cmake)
 if (BUNDLE_LIBGIT2)
+  add_git_submodule(libs/libgit2)	# clone it if user didn't clone explicitly
   add_subdirectory(libs/libgit2)
 endif()
 
@@ -25,11 +36,7 @@ file(GLOB_RECURSE lib_sources
   include/git2cpp/*.h
 )
 
-if (MSVC AND ($MSVC_VERSION VERSION_GREATER 1900))
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
-endif()
-
-add_library(git2cpp STATIC ${lib_sources})
+add_library(git2cpp ${lib_sources})
 
 target_include_directories(git2cpp
   PRIVATE

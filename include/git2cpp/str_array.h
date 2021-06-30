@@ -1,8 +1,8 @@
 #pragma once
 
-#include <git2/strarray.h>
-
 #include <cstring>
+
+#include <git2/strarray.h>
 
 namespace git
 {
@@ -36,7 +36,7 @@ namespace git
 
         ~StrArray()
         {
-            git_strarray_free(&str_array_);
+            git_strarray_dispose(&str_array_);   // available with v1.1.0
         }
 
     private:
