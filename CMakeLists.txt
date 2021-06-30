@@ -57,12 +57,6 @@ endif()
 
 target_link_libraries(git2cpp git2)
 
-set_target_properties(git2cpp PROPERTIES
-  CXX_STANDARD 17
-  CXX_STANDARD_REQUIRED YES
-  INTERFACE_COMPILE_FEATURES cxx_std_17
-)
-
 option(BUILD_LIBGIT2CPP_EXAMPLES ON)
 
 if(BUILD_LIBGIT2CPP_EXAMPLES)

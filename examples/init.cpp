@@ -23,15 +23,7 @@
 #include "git2cpp/initializer.h"
 #include "git2cpp/repo.h"
 
-#ifdef USE_BOOST
-#include <boost/utility/string_view.hpp>
-
-using StringView = boost::string_view;
-#else
 #include <string_view>
-
-using StringView = std::string_view;
-#endif
 
 namespace {
 
@@ -44,7 +36,7 @@ namespace {
 }
 
 /* simple string prefix test used in argument parsing */
-size_t is_prefixed(StringView arg, StringView pfx)
+size_t is_prefixed(std::string_view arg, std::string_view pfx)
 {
     return arg == pfx ? pfx.size() : 0;
 }
@@ -153,7 +145,7 @@ int main(int argc, char * argv[])
     for (int i = 1; i < argc; ++i)
     {
         auto arg = argv[i];
-        StringView a = arg;
+        std::string_view a = arg;
 
         if (arg[0] == '-')
             no_options = false;
